@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { movieApi, type MovieApiResponse } from "../../api/movieApi";
+import { mockMovies } from "../../data/mockMovies";
 import { HeroSection } from "../../components/shared/HeroSection";
 import { SearchBar } from "../../components/shared/SearchBar";
 import { NowShowing } from "../../components/shared/NowShowing";
@@ -19,9 +20,13 @@ export default function HomePage() {
       setMovieError("");
       try {
         const res = await movieApi.getAllMovies();
-        if (active) setMovies(res.result ?? []);
+        const data = res.result ?? [];
+        // Fall back to mock data when the backend has no movies yet,
+        // so the landing page still has something to show.
+        if (active) setMovies(data.length > 0 ? data : mockMovies);
       } catch {
-        if (active) setMovieError("Movies are temporarily unavailable.");
+        // Backend unavailable — show mock movies instead of an error.
+        if (active) setMovies(mockMovies);
       } finally {
         if (active) setLoadingMovies(false);
       }
