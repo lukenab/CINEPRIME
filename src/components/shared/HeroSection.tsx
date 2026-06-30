@@ -1,16 +1,22 @@
 import { Ticket, Play, ChevronDown } from "lucide-react";
-import trailerVideo from "../../assets/GattoTeaser.mp4";
+
+// Served statically from /public — not bundled, streamable via HTTP range requests.
+// For production scale, swap this for a CDN/HLS URL.
+const trailerVideo = "/videos/GattoTeaser.mp4";
 
 export function HeroSection() {
   return (
     <section className="relative w-full min-h-screen overflow-hidden">
       {/* Video */}
+      {/* Optional: add a first-frame image at /public/videos/GattoTeaser-poster.jpg
+          and set poster="/videos/GattoTeaser-poster.jpg" to avoid a black flash on load. */}
       <div className="absolute inset-0 w-full h-full z-0 bg-black">
         <video
           autoPlay
           loop
           muted
           playsInline
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ opacity: 0.95 }}
         >
