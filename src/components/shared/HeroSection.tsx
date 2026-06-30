@@ -2,7 +2,7 @@ import { Ticket, Play, ChevronDown } from "lucide-react";
 
 // Served statically from /public — not bundled, streamable via HTTP range requests.
 // For production scale, swap this for a CDN/HLS URL.
-const trailerVideo = "/videos/GattoTeaser.mp4";
+const trailerVideo = "/videos/Minion.mp4";
 
 export function HeroSection() {
   return (
