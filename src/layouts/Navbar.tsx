@@ -34,13 +34,40 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Film size={22} style={{ color: ACCENT }} />
-          <span
-            className="tracking-widest uppercase"
-            style={{ color: ACCENT, fontSize: "1.1rem", fontWeight: 700, letterSpacing: "0.2em" }}
+        <div className="flex items-center gap-2.5 cursor-pointer select-none group">
+          <div
+            className="flex items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105"
+            style={{
+              width: "38px",
+              height: "38px",
+              background: "linear-gradient(135deg, rgba(96,165,250,0.18), rgba(37,99,235,0.10))",
+              border: "1px solid rgba(96,165,250,0.45)",
+              boxShadow: "0 0 18px rgba(59,130,246,0.35), inset 0 0 10px rgba(96,165,250,0.15)",
+            }}
           >
-            CinePrime
+            <Film size={20} style={{ color: "#60a5fa", filter: "drop-shadow(0 0 6px rgba(96,165,250,0.7))" }} />
+          </div>
+          <span
+            className="uppercase leading-none"
+            style={{
+              fontSize: "1.3rem",
+              fontWeight: 800,
+              letterSpacing: "0.18em",
+              fontFamily: "'Inter', sans-serif",
+              textShadow: "0 0 22px rgba(59,130,246,0.45)",
+            }}
+          >
+            <span style={{ color: "#f0f6ff" }}>Cine</span>
+            <span
+              style={{
+                background: "linear-gradient(135deg, #93c5fd 0%, #3b82f6 50%, #2563eb 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Prime
+            </span>
           </span>
         </div>
 
