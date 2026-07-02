@@ -30,6 +30,8 @@ export type MovieApiResponse = {
   movieType: string[];
   showTimes: ShowTimeResponse[];
   createAt: string | number[];
+  gallery?: string[]; // optional image gallery for the detail carousel (mock/landing)
+  trailerUrl?: string; // optional YouTube trailer link
 };
 
 export type TypeResponse = {

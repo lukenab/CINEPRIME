@@ -13,6 +13,8 @@ const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 const shouldMock = (url: string | undefined): boolean => {
   if (!url) return false;
   return (
+    url === "/api/movies/all" ||
+    url === "/api/cinema-clusters" ||
     url === "/api/showtimes" ||
     url === "/api/showtimes/assign" ||
     url.match(/^\/api\/showtimes\/\d+$/) !== null
@@ -62,7 +64,22 @@ axiosClient.interceptors.response.use(
       (s) => url.includes(s)
     );
 
-    if (error?.response?.status === 401 && !isPublicAuthCall && !originalRequest._retry) {
+    // Customer-facing endpoints are open to guests (no membership required).
+    // A 401 here must NOT bounce the visitor to /login — just let the caller handle it.
+    const isGuestCustomerCall = [
+      "/api/movies",
+      "/api/cinema-clusters",
+      "/api/showtimes",
+      "/api/bookings",
+      "/api/seats",
+    ].some((s) => url.includes(s));
+
+    if (
+      error?.response?.status === 401 &&
+      !isPublicAuthCall &&
+      !isGuestCustomerCall &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
 
       const currentToken = localStorage.getItem("accessToken");

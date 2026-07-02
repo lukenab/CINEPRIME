@@ -7,6 +7,7 @@ type Props = {
   movies: MovieApiResponse[];
   loading?: boolean;
   error?: string;
+  onBook?: (movie: MovieApiResponse) => void;
 };
 
 function formatDuration(minutes?: number): string {
@@ -29,9 +30,10 @@ function toCardMovie(movie: MovieApiResponse, index: number): Movie {
   };
 }
 
-export function NowShowing({ movies, loading = false, error = "" }: Props) {
+export function NowShowing({ movies, loading = false, error = "", onBook }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const cardMovies = movies.filter((movie) => movie.status !== false).map(toCardMovie);
+  const visibleMovies = movies.filter((movie) => movie.status !== false);
+  const cardMovies = visibleMovies.map(toCardMovie);
 
   const scroll = (dir: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -118,8 +120,12 @@ export function NowShowing({ movies, loading = false, error = "" }: Props) {
               msOverflowStyle: "none",
             }}
           >
-            {cardMovies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
+            {cardMovies.map((card, i) => (
+              <MovieCard
+                key={card.id}
+                movie={card}
+                onBook={onBook ? () => onBook(visibleMovies[i]) : undefined}
+              />
             ))}
           </div>
         )}

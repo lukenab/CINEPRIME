@@ -1,6 +1,8 @@
 import { Ticket, Play, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import trailerVideo from "../../assets/GattoTeaser.mp4";
+
+// Served statically from /public — not bundled, streamable via HTTP range requests.
+const trailerVideo = "/videos/Minion.mp4";
 
 export function HeroSection() {
   const navigate = useNavigate();

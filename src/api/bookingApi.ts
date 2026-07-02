@@ -20,6 +20,21 @@ export interface BookingConfirmation {
 }
 
 
+// Guests can book without a backend/login. Fall back to the stateful mock when the
+// API is unreachable (network / 404 / 5xx) OR blocks the request with auth (401 / 403).
+function shouldUseMock(error: any): boolean {
+  const status = error?.response?.status;
+  return (
+    error?.code === "ERR_NETWORK" ||
+    error?.message === "Network Error" ||
+    !error?.response ||
+    status === 401 ||
+    status === 403 ||
+    status === 404 ||
+    status >= 500
+  );
+}
+
 const mockState: Record<string, Seat[]> = {};
 
 function getMockSeats(showtimeId: string | number) {
@@ -73,9 +88,8 @@ export const bookingApi = {
       const res: any = await axiosClient.get(`/api/showtimes/${showtimeId}/seats`);
       return res.result || res;
     } catch (error: any) {
-      const isApiMissing = !error.response || error.response.status === 404 || error.response.status >= 500;
-      if (error.code === "ERR_NETWORK" || error.message === "Network Error" || isApiMissing) {
-        console.warn("🚀 BACKEND UNREACHABLE OR ENDPOINT MISSING: USING STATEFUL MOCK API for getSeatsByShowtime");
+      if (shouldUseMock(error)) {
+        console.warn("🚀 BACKEND UNREACHABLE / AUTH-BLOCKED: USING STATEFUL MOCK API for getSeatsByShowtime");
         return new Promise((resolve) => {
           setTimeout(() => {
             const seats = JSON.parse(JSON.stringify(getMockSeats(showtimeId)));
@@ -92,9 +106,10 @@ export const bookingApi = {
       const res: any = await axiosClient.post(`/api/bookings`, payload);
       return res.result || res;
     } catch (error: any) {
-      const isApiMissing = !error.response || error.response.status === 404 || error.response.status >= 500;
-      if (error.code === "ERR_NETWORK" || error.message === "Network Error" || isApiMissing) {
-        console.warn("🚀 BACKEND UNREACHABLE OR ENDPOINT MISSING: USING STATEFUL MOCK API for createBooking");
+      // A real 409 (seat conflict) from the backend must surface as-is, not fall to mock.
+      if (error?.response?.status === 409) throw error;
+      if (shouldUseMock(error)) {
+        console.warn("🚀 BACKEND UNREACHABLE / AUTH-BLOCKED: USING STATEFUL MOCK API for createBooking");
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             const sid = String(payload.showtimeId);

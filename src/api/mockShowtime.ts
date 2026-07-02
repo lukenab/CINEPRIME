@@ -1,4 +1,6 @@
 import type { ShowtimeResponse, ShowtimeAssignPayload, ShowtimeUpdatePayload } from './showtimeApi';
+import { mockMovies } from '../data/mockMovies';
+import { mockClusters } from '../data/mockClusters';
 
 const timeToMinutes = (t: string): number => {
   const [h, m] = t.split(':').map(Number);
@@ -69,6 +71,17 @@ const mockError = (message: string, status = 400) => {
 export const handleMockRequest = (config: any): Promise<any> => {
   const { url, method, data } = config;
   const parsed = data ? (typeof data === 'string' ? JSON.parse(data) : data) : null;
+
+  // ── Landing page (read-only) ────────────────────────────────────────────────
+  // GET /api/movies/all
+  if (url === '/api/movies/all' && method === 'get') {
+    return mockResponse({ code: 1000, result: mockMovies });
+  }
+
+  // GET /api/cinema-clusters
+  if (url === '/api/cinema-clusters' && method === 'get') {
+    return mockResponse({ code: 1000, result: mockClusters });
+  }
 
   // GET /api/showtimes
   if (url === '/api/showtimes' && method === 'get') {
