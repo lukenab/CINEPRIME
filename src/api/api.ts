@@ -17,7 +17,10 @@ const shouldMock = (url: string | undefined): boolean => {
     url === "/api/cinema-clusters" ||
     url === "/api/showtimes" ||
     url === "/api/showtimes/assign" ||
-    url.match(/^\/api\/showtimes\/\d+$/) !== null
+    url.match(/^\/api\/showtimes\/\d+$/) !== null ||
+    url.endsWith("auth/login") ||
+    url.endsWith("auth/logout") ||
+    url.endsWith("auth/refresh")
   );
 };
 
