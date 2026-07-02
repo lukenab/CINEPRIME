@@ -8,19 +8,7 @@ import { CinemaLocations } from "../../components/shared/CinemaLocations";
 import { ExperienceBanner } from "../../components/shared/ExperienceBanner";
 import { ComingSoon } from "../../components/shared/ComingSoon";
 import { MoviePreviewModal } from "../../components/shared/MoviePreviewModal";
-
-// Backend movies may lack a trailer/gallery — enrich them from the mock catalogue
-// (matched by English title) so the preview can autoplay a trailer.
-function enrichMovie(m: MovieApiResponse): MovieApiResponse {
-  const mock = mockMovies.find(
-    (mm) => mm.movieNameEnglish?.toLowerCase() === m.movieNameEnglish?.toLowerCase()
-  );
-  return {
-    ...m,
-    trailerUrl: m.trailerUrl ?? mock?.trailerUrl,
-    gallery: m.gallery ?? mock?.gallery,
-  };
-}
+import { enrichMovie } from "../../utils/enrichMovie";
 
 export default function HomePage() {
   const [movies, setMovies] = useState<MovieApiResponse[]>([]);

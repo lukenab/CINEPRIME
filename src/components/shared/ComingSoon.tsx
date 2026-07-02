@@ -14,7 +14,11 @@ function firstShowDate(movie: MovieApiResponse): string {
 }
 
 export function ComingSoon({ movies }: Props) {
-  const comingMovies = movies.filter((movie) => movie.status !== false).slice(0, 3);
+  // Hide movies with no poster uploaded yet — they'd otherwise render as a
+  // blank gradient tile with just text instead of a real card.
+  const comingMovies = movies
+    .filter((movie) => movie.status !== false && (movie.largeImage || movie.smallImage))
+    .slice(0, 3);
 
   if (comingMovies.length === 0) {
     return null;

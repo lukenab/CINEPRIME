@@ -12,31 +12,26 @@ type Props = {
   onClose: () => void;
 };
 
-// Pool of cinematic stills used to enrich each movie's gallery so the carousel
-// always has several slides — even for movies coming from the backend that only
-// ship a poster + small image. Each movie gets a stable, distinct subset (seeded
-// by movieId), with its real poster always shown first.
-const STILLS = [
+// Fallback stills — only used when a movie ships no gallery/backdrops of its
+// own (e.g. a backend movie with just a poster). Real per-movie images always
+// take priority so the carousel never shows art unrelated to the film.
+const FALLBACK_STILLS = [
   "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1400&q=80&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=1400&q=80&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1400&q=80&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1497015289639-54688650d173?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1521967906867-14ec9d64bee8?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=1400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1615986201152-7686a4867f30?w=1400&q=80&auto=format&fit=crop",
 ];
 
 function buildGallery(movie: MovieApiResponse): string[] {
-  const start = ((movie.movieId || 0) * 3) % STILLS.length;
-  const picks = Array.from({ length: 4 }, (_, k) => STILLS[(start + k) % STILLS.length]);
-  const all = [movie.largeImage, movie.smallImage, ...(movie.gallery ?? []), ...picks];
-  // Keep insertion order (poster first) and drop empties/duplicates.
-  return Array.from(new Set(all.filter(Boolean) as string[]));
+  const real = [movie.largeImage, movie.smallImage, ...(movie.gallery ?? []), ...(movie.backdrops ?? [])];
+  const dedupedReal = Array.from(new Set(real.filter(Boolean) as string[]));
+
+  // Only pad with generic stills if the movie has nothing beyond a single poster.
+  if (dedupedReal.length > 1) return dedupedReal;
+
+  const start = ((movie.movieId || 0) * 3) % FALLBACK_STILLS.length;
+  const picks = Array.from({ length: 3 }, (_, k) => FALLBACK_STILLS[(start + k) % FALLBACK_STILLS.length]);
+  return Array.from(new Set([...dedupedReal, ...picks].filter(Boolean) as string[]));
 }
 
 function formatDuration(min?: number) {
