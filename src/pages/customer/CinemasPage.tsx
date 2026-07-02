@@ -1,14 +1,25 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MapPin, Building2, Armchair, Phone, ArrowRight, Search } from "lucide-react";
+import type { ClusterResponse } from "../../api/movieApi";
 import { mockClusters } from "../../data/mockClusters";
 
 const clusters = mockClusters.filter((c) => c.status === "ACTIVE");
 
 export default function CinemasPage() {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [activeProvince, setActiveProvince] = useState("All");
 
   const provinces = useMemo(() => ["All", ...Array.from(new Set(clusters.map((c) => c.province)))], []);
+
+  // Same localStorage keys the search bar's location picker uses, so the
+  // chosen cinema flows through to Movies and pre-selects it on Showtime page.
+  const handleViewShowtimes = (cluster: ClusterResponse) => {
+    localStorage.setItem("cp_province", cluster.province);
+    localStorage.setItem("cp_cluster", JSON.stringify(cluster));
+    navigate("/movies");
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -78,6 +89,7 @@ export default function CinemasPage() {
             {filtered.map((cluster) => (
               <div
                 key={cluster.clusterId}
+                onClick={() => handleViewShowtimes(cluster)}
                 className="group relative cursor-pointer rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
                 style={{ border: "1px solid rgba(255,255,255,0.07)", backgroundColor: "rgba(255,255,255,0.03)" }}
                 onMouseEnter={(e) => {

@@ -7,6 +7,9 @@ import { NowShowing } from "../../components/shared/NowShowing";
 import { CinemaLocations } from "../../components/shared/CinemaLocations";
 import { ExperienceBanner } from "../../components/shared/ExperienceBanner";
 import { ComingSoon } from "../../components/shared/ComingSoon";
+import { OffersTeaser } from "../../components/shared/OffersTeaser";
+import { UpcomingEvents } from "../../components/shared/UpcomingEvents";
+import { Testimonials } from "../../components/shared/Testimonials";
 import { MoviePreviewModal } from "../../components/shared/MoviePreviewModal";
 import { enrichMovie } from "../../utils/enrichMovie";
 
@@ -55,7 +58,10 @@ export default function HomePage() {
       />
       <CinemaLocations />
       <ExperienceBanner />
+      <OffersTeaser />
       <ComingSoon movies={movies} />
+      <UpcomingEvents />
+      <Testimonials />
 
       <MoviePreviewModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />
     </>

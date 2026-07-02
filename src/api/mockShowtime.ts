@@ -66,11 +66,80 @@ const mockError = (message: string, status = 400) => {
   return Promise.reject(err);
 };
 
+// ── Mock auth (login / logout / refresh) ──────────────────────────────────────
+// No backend is deployed with the frontend, so these credentials only exist
+// client-side: admin/admin → admin dashboard, user/user → customer landing page.
+
+type MockRole = "ROLE_ADMIN" | "ROLE_MEMBER";
+
+const MOCK_ACCOUNTS: Record<string, { password: string; role: MockRole }> = {
+  admin: { password: "admin", role: "ROLE_ADMIN" },
+  user: { password: "user", role: "ROLE_MEMBER" },
+};
+
+const TOKEN_TTL_SECONDS = 8 * 60 * 60; // 8h
+
+function base64UrlEncode(obj: unknown): string {
+  const json = JSON.stringify(obj);
+  const b64 = btoa(unescape(encodeURIComponent(json)));
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function base64UrlDecode<T>(segment: string): T {
+  const b64 = segment.replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(decodeURIComponent(escape(atob(b64))));
+}
+
+// Builds a JWT-shaped (but unsigned) token so jwt-decode on the client can
+// read `sub`/`role`/`exp` exactly like a real backend token would.
+function createMockToken(username: string, role: MockRole): string {
+  const header = { alg: "HS256", typ: "JWT" };
+  const now = Math.floor(Date.now() / 1000);
+  const payload = { sub: username, role, iat: now, exp: now + TOKEN_TTL_SECONDS };
+  return `${base64UrlEncode(header)}.${base64UrlEncode(payload)}.mock-signature`;
+}
+
+const mockAuthError = (message: string, code = 1008, status = 401) => {
+  const err = new Error(message);
+  (err as any).response = { status, data: { code, message } };
+  return Promise.reject(err);
+};
+
 // ── Mock request handler (showtime CRUD only) ────────────────────────────────
 
 export const handleMockRequest = (config: any): Promise<any> => {
   const { url, method, data } = config;
   const parsed = data ? (typeof data === 'string' ? JSON.parse(data) : data) : null;
+
+  // POST auth/login — mock credentials: admin/admin (admin dashboard), user/user (landing page)
+  if (url?.endsWith('auth/login') && method === 'post') {
+    const { username, password } = (parsed ?? {}) as { username?: string; password?: string };
+    const account = username ? MOCK_ACCOUNTS[username.toLowerCase()] : undefined;
+    if (!account || account.password !== password) {
+      return mockAuthError("Incorrect username or password.");
+    }
+    const token = createMockToken(username!.toLowerCase(), account.role);
+    return mockResponse({ code: 1000, result: { token } });
+  }
+
+  // POST auth/logout
+  if (url?.endsWith('auth/logout') && method === 'post') {
+    return mockResponse({ code: 1000, message: "Logged out" });
+  }
+
+  // POST auth/refresh — reissue a fresh token for the same subject/role
+  if (url?.endsWith('auth/refresh') && method === 'post') {
+    const { token } = (parsed ?? {}) as { token?: string };
+    if (!token) return mockAuthError("Missing token.", 1008, 400);
+    try {
+      const [, payloadSeg] = token.split('.');
+      const payload = base64UrlDecode<{ sub: string; role: MockRole }>(payloadSeg);
+      const newToken = createMockToken(payload.sub, payload.role);
+      return mockResponse({ code: 1000, result: { token: newToken } });
+    } catch {
+      return mockAuthError("Invalid token.", 1008, 400);
+    }
+  }
 
   // ── Landing page (read-only) ────────────────────────────────────────────────
   // GET /api/movies/all

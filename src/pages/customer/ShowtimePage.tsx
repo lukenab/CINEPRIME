@@ -3,6 +3,7 @@ import { format, addDays, isSameDay } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
 import { movieApi, MovieApiResponse, ShowTimeResponse } from "../../api/movieApi";
 import { mockMovies } from "../../data/mockMovies";
+import { mockClusters } from "../../data/mockClusters";
 import { MovieDetailCarousel } from "../../components/shared/MovieDetailCarousel";
 import { TrailerModal } from "../../components/shared/TrailerModal";
 import {
@@ -66,6 +67,14 @@ function statusMeta(status: string) {
 
 const isDisabled = (s: string) => s === "FINISHED" || s === "CANCELLED";
 
+// Deterministic per-cinema offset so each cluster gets a stable, distinct
+// schedule instead of two hardcoded name checks.
+function cinemaSeed(cinemaName: string): number {
+  let h = 0;
+  for (let i = 0; i < cinemaName.length; i++) h = (h * 31 + cinemaName.charCodeAt(i)) % 1000;
+  return h;
+}
+
 function getMockShowtimesForDateAndCinema(
   movieId: number,
   date: Date,
@@ -75,8 +84,9 @@ function getMockShowtimesForDateAndCinema(
     return []; // Empty state demo for Wednesday
   }
 
+  const seed = cinemaSeed(cinemaName);
   const rooms = ["IMAX", "A", "B", "C"];
-  const showtimesByRoom: Record<string, string[]> = cinemaName === "CinePrime Lê Văn Việt" ? {
+  const showtimesByRoom: Record<string, string[]> = seed % 2 === 0 ? {
     "IMAX": ["10:00", "14:30", "19:00"],
     "A": ["09:15", "13:45", "18:30"],
     "B": ["11:30", "16:15", "20:45"],
@@ -89,7 +99,7 @@ function getMockShowtimesForDateAndCinema(
   };
 
   const results: (ShowTimeResponse & { showDateTimeISO: string })[] = [];
-  let idCounter = movieId * 1000 + (cinemaName.includes("Việt") ? 100 : 200);
+  let idCounter = movieId * 1000 + seed;
 
   const dateStr = format(date, "yyyy-MM-dd");
 
@@ -295,8 +305,17 @@ export default function ShowtimePage() {
   const today = new Date();
   const dates = Array.from({ length: 7 }, (_, i) => addDays(today, i));
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const [selectedCinema, setSelectedCinema] = useState<string>("CinePrime Lê Văn Việt");
-  const CINEMAS = ["CinePrime Lê Văn Việt", "CinePrime Quang Trung"];
+  const CINEMAS = useMemo(() => mockClusters.filter((c) => c.status === "ACTIVE").map((c) => c.clusterName), []);
+  // Default to the cinema chosen via "View showtimes" or the search location picker.
+  const [selectedCinema, setSelectedCinema] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem("cp_cluster");
+      const parsed = saved ? JSON.parse(saved) : null;
+      return parsed?.clusterName && CINEMAS.includes(parsed.clusterName) ? parsed.clusterName : CINEMAS[0];
+    } catch {
+      return CINEMAS[0];
+    }
+  });
 
   const [showSoldOutModal, setShowSoldOutModal] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
