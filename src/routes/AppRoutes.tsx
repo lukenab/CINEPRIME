@@ -2,6 +2,10 @@ import AuthLayout from "../layouts/AuthLayout";
 import CustomerLayout from "../layouts/CustomerLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import HomePage from "../pages/customer/HomePage";
+import MoviesPage from "../pages/customer/MoviesPage";
+import CinemasPage from "../pages/customer/CinemasPage";
+import EventsPage from "../pages/customer/EventsPage";
+import OffersPage from "../pages/customer/OffersPage";
 import ShowtimePage from "../pages/customer/ShowtimePage";
 import SeatBookingPage from "../pages/customer/SeatBookingPage";
 import { Route, Routes } from "react-router-dom";
@@ -38,6 +42,10 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<CustomerLayout />}>
         <Route path="/" element={<RootRedirect />} />
+        <Route path="/movies" element={<MoviesPage />} />
+        <Route path="/cinemas" element={<CinemasPage />} />
+        <Route path="/events" element={<EventsPage />} />
+        <Route path="/offers" element={<OffersPage />} />
         <Route path="/showtime/:movieId" element={<ShowtimePage />} />
         <Route path="/booking/:showtimeId" element={<SeatBookingPage />} />
       </Route>

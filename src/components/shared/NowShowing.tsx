@@ -32,7 +32,11 @@ function toCardMovie(movie: MovieApiResponse, index: number): Movie {
 
 export function NowShowing({ movies, loading = false, error = "", onBook }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const visibleMovies = movies.filter((movie) => movie.status !== false);
+  // Hide movies with no poster uploaded yet — they'd otherwise render as a
+  // blank gradient tile with just text instead of a real card.
+  const visibleMovies = movies.filter(
+    (movie) => movie.status !== false && (movie.largeImage || movie.smallImage)
+  );
   const cardMovies = visibleMovies.map(toCardMovie);
 
   const scroll = (dir: "left" | "right") => {

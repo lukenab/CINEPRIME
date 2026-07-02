@@ -31,6 +31,7 @@ export type MovieApiResponse = {
   showTimes: ShowTimeResponse[];
   createAt: string | number[];
   gallery?: string[]; // optional image gallery for the detail carousel (mock/landing)
+  backdrops?: string[]; // optional extra scene stills for this movie (mock)
   trailerUrl?: string; // optional YouTube trailer link
 };
 

@@ -17,6 +17,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "Illumination",
     largeImage: "https://image.tmdb.org/t/p/w500/wWba3TaojhK7NdycRhoQpsG0FaH.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/wWba3TaojhK7NdycRhoQpsG0FaH.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/twsxsfao6ZOVvT8LfudH603MMi6.jpg",
+      "https://image.tmdb.org/t/p/w1280/lgkPzcOSnTvjeMnuFzozRO5HHw1.jpg",
+    ],
     movieType: ["Animation", "Comedy"],
     showTimes: [
       { showTimeId: 101, showDate: "2026-07-02", startTime: "19:30", endTime: "21:05", cinemaRoomId: 1, cinemaRoomName: "IMAX", updateAt: "2026-06-25" },
@@ -37,6 +41,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "Paramount Pictures",
     largeImage: "https://image.tmdb.org/t/p/w500/yrpPYKijwdMHyTGIOd1iK1h0Xno.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/yrpPYKijwdMHyTGIOd1iK1h0Xno.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/6XjMwQTvnICBz6TguiDKkDVHvgS.jpg",
+      "https://image.tmdb.org/t/p/w1280/1XyIHrP7X7rn3UBkNy9hPb9vCUf.jpg",
+    ],
     movieType: ["Horror", "Sci-Fi"],
     showTimes: [
       { showTimeId: 102, showDate: "2026-07-03", startTime: "20:00", endTime: "21:40", cinemaRoomId: 1, cinemaRoomName: "IMAX", updateAt: "2026-06-25" },
@@ -57,6 +65,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "Pixar",
     largeImage: "https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/p5ozvmdgsmbWe0H8Xk7Rc8SCwAB.jpg",
+      "https://image.tmdb.org/t/p/w1280/xg27NrXi7VXCGUr7MG75UqLl6Vg.jpg",
+    ],
     movieType: ["Animation", "Family"],
     trailerUrl: "https://www.youtube.com/watch?v=LEjhY15eCx0",
     showTimes: [
@@ -78,6 +90,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "20th Century Studios",
     largeImage: "https://image.tmdb.org/t/p/w500/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/fypydCipcWDKDTTCoPucBsdGYXW.jpg",
+      "https://image.tmdb.org/t/p/w1280/fqv8v6AycXKsivp1T5yKtLbGXce.jpg",
+    ],
     movieType: ["Sci-Fi", "Action"],
     showTimes: [
       { showTimeId: 104, showDate: "2026-07-04", startTime: "21:00", endTime: "23:25", cinemaRoomId: 1, cinemaRoomName: "IMAX", updateAt: "2026-06-25" },
@@ -98,6 +114,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "Marvel Studios",
     largeImage: "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/cOoVcVQ3i1m5b2xtqKBtoTSbxC1.jpg",
+      "https://image.tmdb.org/t/p/w1280/by8z9Fe8y7p4jo2YlW2SZDnptyT.jpg",
+    ],
     movieType: ["Action", "Comedy"],
     showTimes: [
       { showTimeId: 105, showDate: "2026-07-05", startTime: "20:30", endTime: "22:38", cinemaRoomId: 1, cinemaRoomName: "IMAX", updateAt: "2026-06-25" },
@@ -118,6 +138,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "Columbia Pictures",
     largeImage: "https://image.tmdb.org/t/p/w500/oGythE98MYleE6mZlGs5oBGkux1.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/oGythE98MYleE6mZlGs5oBGkux1.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/3q01ACG0MWm0DekhvkPFCXyPZSu.jpg",
+      "https://image.tmdb.org/t/p/w1280/tncbMvfV0V07UZozXdBEq4Wu9HH.jpg",
+    ],
     movieType: ["Action", "Crime"],
     showTimes: [
       { showTimeId: 106, showDate: "2026-07-06", startTime: "19:45", endTime: "21:40", cinemaRoomId: 1, cinemaRoomName: "IMAX", updateAt: "2026-06-25" },
@@ -138,6 +162,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "Warner Bros.",
     largeImage: "https://image.tmdb.org/t/p/w500/iADOJ8Zymht2JPMoy3R7xceZprc.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/iADOJ8Zymht2JPMoy3R7xceZprc.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/raph7qjAGTMXaIjVxt6ZDSXRzUr.jpg",
+      "https://image.tmdb.org/t/p/w1280/wNAhuOZ3Zf84jCIlrcI6JhgmY5q.jpg",
+    ],
     movieType: ["Action", "Adventure"],
     showTimes: [
       { showTimeId: 107, showDate: "2026-07-07", startTime: "20:15", endTime: "22:43", cinemaRoomId: 1, cinemaRoomName: "IMAX", updateAt: "2026-06-25" },
@@ -158,6 +186,10 @@ const baseMovies: MovieApiResponse[] = [
     movieProductionCompany: "Sony Pictures",
     largeImage: "https://image.tmdb.org/t/p/w500/p6AbOJvMQhBmffd0PIv0u8ghWeY.jpg",
     smallImage: "https://image.tmdb.org/t/p/w300/p6AbOJvMQhBmffd0PIv0u8ghWeY.jpg",
+    backdrops: [
+      "https://image.tmdb.org/t/p/w1280/P82NAcEsLIYgQtrtn36tYsj41m.jpg",
+      "https://image.tmdb.org/t/p/w1280/a3lkC7qTYqSA8FqZAyKZzQMECGc.jpg",
+    ],
     movieType: ["Animation", "Family"],
     showTimes: [
       { showTimeId: 108, showDate: "2026-07-08", startTime: "17:30", endTime: "19:11", cinemaRoomId: 1, cinemaRoomName: "IMAX", updateAt: "2026-06-25" },
@@ -166,28 +198,11 @@ const baseMovies: MovieApiResponse[] = [
   },
 ];
 
-// Cinematic still images used to pad each movie's gallery so the detail carousel
-// has multiple interactive slides. (Placeholder stills for the mock — the first
-// slide is always the real movie poster.)
-const CINEMATIC_STILLS = [
-  "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1280&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=1280&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1280&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1280&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?w=1280&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1280&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?w=1280&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=1280&q=80&auto=format&fit=crop",
-];
-
-// Attach a gallery to each movie: real poster first, then two rotating stills.
-export const mockMovies: MovieApiResponse[] = baseMovies.map((movie, i) => ({
+// Attach a gallery to each movie: real poster first, then its own real backdrop
+// stills (actual scenes from that film, sourced per-movie — not generic filler).
+export const mockMovies: MovieApiResponse[] = baseMovies.map((movie) => ({
   ...movie,
-  gallery: [
-    movie.largeImage,
-    CINEMATIC_STILLS[(i * 2) % CINEMATIC_STILLS.length],
-    CINEMATIC_STILLS[(i * 2 + 1) % CINEMATIC_STILLS.length],
-  ],
+  gallery: [movie.largeImage, ...(movie.backdrops ?? [])],
 }));
 
 export default mockMovies;

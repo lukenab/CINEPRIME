@@ -1,18 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, SlidersHorizontal, MapPin, ChevronDown } from "lucide-react";
-import { movieApi, type ClusterResponse } from "../../api/movieApi";
+import type { ClusterResponse } from "../../api/movieApi";
+import { mockClusters } from "../../data/mockClusters";
 
 const GENRES = ["All", "Action", "Drama", "Comedy", "Horror", "Sci-Fi", "Romance", "Thriller", "Animation"];
 
-// ── Mock clusters (fallback khi backend chưa có) ──────────────────────────────
-const MOCK_CLUSTERS: ClusterResponse[] = [
-  { clusterId: 1, clusterName: "CinePrime Quận 1",     province: "TP. Hồ Chí Minh", address: "123 Nguyễn Huệ, Quận 1",        status: "ACTIVE" },
-  { clusterId: 2, clusterName: "CinePrime Thủ Đức",    province: "TP. Hồ Chí Minh", address: "456 Võ Văn Ngân, TP. Thủ Đức", status: "ACTIVE" },
-  { clusterId: 3, clusterName: "CinePrime Hoàn Kiếm",  province: "Hà Nội",           address: "78 Hàng Bài, Hoàn Kiếm",       status: "ACTIVE" },
-  { clusterId: 4, clusterName: "CinePrime Cầu Giấy",   province: "Hà Nội",           address: "22 Xuân Thủy, Cầu Giấy",      status: "ACTIVE" },
-  { clusterId: 5, clusterName: "CinePrime Hải Châu",   province: "Đà Nẵng",          address: "30 Trần Phú, Hải Châu",        status: "ACTIVE" },
-  { clusterId: 6, clusterName: "CinePrime Ninh Kiều",  province: "Cần Thơ",          address: "15 Hai Bà Trưng, Ninh Kiều",  status: "ACTIVE" },
-];
+// Landing page runs on mock data — no live /api/cinema-clusters call.
+const CLUSTERS = mockClusters.filter((c) => c.status === "ACTIVE");
 
 // ── Location Dropdown ─────────────────────────────────────────────────────────
 type LocationDropdownProps = {
@@ -153,7 +147,7 @@ function LocationDropdown({ clusters, selectedProvince, selectedCluster, onSelec
 export function SearchBar() {
   const [query, setQuery] = useState("");
   const [activeGenre, setActiveGenre] = useState("All");
-  const [clusters, setClusters] = useState<ClusterResponse[]>([]);
+  const clusters = CLUSTERS;
   const [selectedProvince, setSelectedProvince] = useState<string>(() =>
     localStorage.getItem("cp_province") ?? ""
   );
@@ -163,12 +157,6 @@ export function SearchBar() {
       return saved ? JSON.parse(saved) : null;
     } catch { return null; }
   });
-
-  useEffect(() => {
-    movieApi.getClusters()
-      .then((res) => setClusters((res.result ?? []).filter((c) => c.status === "ACTIVE")))
-      .catch(() => setClusters(MOCK_CLUSTERS));
-  }, []);
 
   const handleLocationSelect = (province: string, cluster: ClusterResponse | null) => {
     setSelectedProvince(province);

@@ -1,14 +1,23 @@
 import { useState } from "react";
 import { Film, Search, Menu, X, LogOut, User } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const ACCENT = "#3b82f6";
+
+const NAV_ITEMS = [
+  { label: "Home", path: "/" },
+  { label: "Movies", path: "/movies" },
+  { label: "Cinemas", path: "/cinemas" },
+  { label: "Events", path: "/events" },
+  { label: "Offers", path: "/offers" },
+];
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
 
   const token = localStorage.getItem("accessToken");
@@ -71,16 +80,24 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-8">
-          {["Home", "Movies", "Cinemas", "Events", "Offers"].map((item) => (
-            <a
-              key={item}
-              href="#"
-              className="text-white/70 hover:text-white transition-colors duration-200"
-              style={{ fontSize: "0.875rem", letterSpacing: "0.05em" }}
-            >
-              {item}
-            </a>
-          ))}
+          {NAV_ITEMS.map(({ label, path }) => {
+            const active = location.pathname === path;
+            return (
+              <Link
+                key={label}
+                to={path}
+                className="transition-colors duration-200"
+                style={{
+                  fontSize: "0.875rem",
+                  letterSpacing: "0.05em",
+                  color: active ? "#60a5fa" : "rgba(255,255,255,0.7)",
+                  fontWeight: active ? 600 : 400,
+                }}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="hidden md:flex items-center gap-4">
@@ -198,11 +215,20 @@ export function Navbar() {
             />
           </form>
 
-          {["Home", "Movies", "Cinemas", "Events", "Offers"].map((item) => (
-            <a key={item} href="#" className="text-white/70 hover:text-white text-sm py-1">
-              {item}
-            </a>
-          ))}
+          {NAV_ITEMS.map(({ label, path }) => {
+            const active = location.pathname === path;
+            return (
+              <Link
+                key={label}
+                to={path}
+                onClick={() => setMenuOpen(false)}
+                className="text-sm py-1"
+                style={{ color: active ? "#60a5fa" : "rgba(255,255,255,0.7)", fontWeight: active ? 600 : 400 }}
+              >
+                {label}
+              </Link>
+            );
+          })}
 
           {!isLogged && (
             <Link
