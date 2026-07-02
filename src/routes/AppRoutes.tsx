@@ -1,6 +1,9 @@
 import AuthLayout from "../layouts/AuthLayout";
 import CustomerLayout from "../layouts/CustomerLayout";
 import LoginPage from "../pages/auth/LoginPage";
+import HomePage from "../pages/customer/HomePage";
+import ShowtimePage from "../pages/customer/ShowtimePage";
+import SeatBookingPage from "../pages/customer/SeatBookingPage";
 import { Route, Routes } from "react-router-dom";
 import RootRedirect from "./RootRedirect";
 import ProtectedRoute from "./ProtectedRoute";
@@ -10,12 +13,13 @@ import ManageUserPage from "../pages/admin/ManageUserPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import ManageMoviePage from "../pages/admin/ManageMoviePage";
 import ManageCinemaRoomsPage from "../pages/admin/ManageCinemaRoomsPage";
+import ManageCinemaClusterPage from "../pages/admin/ManageCinemaClusterPage";
 import RoomDetailPage from "../pages/admin/RoomDetailPage";
 import ManageGenresPage from "../pages/admin/ManageGenresPage";
-import ManageShowTimePage from "../pages/admin/ManageShowTimePage";
 import CreateUserPage from "../pages/admin/CreateUserPage";
 import EditUserPage from "../pages/admin/EditUserPage";
 import UserDetailPage from "../pages/admin/UserDetailPage";
+import ManageShowtimePage from "../pages/admin/ManageShowTimePage";
 import ManageBookingPage from "../pages/admin/ManageBookingPage";
 import ManageEmployeePage from "../pages/admin/ManageEmployeePage";
 import CreateEmployeePage from "../pages/admin/CreateEmployeePage";
@@ -34,6 +38,8 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<CustomerLayout />}>
         <Route path="/" element={<RootRedirect />} />
+        <Route path="/showtime/:movieId" element={<ShowtimePage />} />
+        <Route path="/booking/:showtimeId" element={<SeatBookingPage />} />
       </Route>
 
       <Route element={<AuthLayout/>}>
@@ -48,7 +54,7 @@ export default function AppRoutes() {
 
           {/* Accessible by both ADMIN and EMPLOYEE */}
           <Route path="movies"    element={<ManageMoviePage/>}/>
-          <Route path="showtimes" element={<ManageShowTimePage/>}/>
+          <Route path="showtimes" element={<ManageShowtimePage/>}/>
           <Route path="bookings"  element={<ManageBookingPage/>}/>
           <Route path="sell"      element={<TicketSalePage/>}/>
 
@@ -62,6 +68,7 @@ export default function AppRoutes() {
             <Route path="users/create"   element={<CreateUserPage/>}/>
             <Route path="users/edit/:id" element={<EditUserPage/>}/>
             <Route path="users/:id"      element={<UserDetailPage/>}/>
+            <Route path="clusters"       element={<ManageCinemaClusterPage/>}/>
             <Route path="rooms"          element={<ManageCinemaRoomsPage/>}/>
             <Route path="rooms/:id"      element={<RoomDetailPage/>}/>
             <Route path="genres"         element={<ManageGenresPage/>}/>
@@ -77,3 +84,4 @@ export default function AppRoutes() {
     </Routes>
   );
 }
+
